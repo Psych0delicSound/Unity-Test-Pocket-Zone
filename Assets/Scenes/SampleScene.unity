@@ -668,7 +668,6 @@ GameObject:
   - component: {fileID: 442754754}
   - component: {fileID: 442754750}
   - component: {fileID: 442754749}
-  - component: {fileID: 442754755}
   - component: {fileID: 442754756}
   m_Layer: 0
   m_Name: Player
@@ -756,9 +755,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 442754748}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0c946c179d612c4fbef9095a72dc620, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b814e77d02353d42bb589b8d2f74904, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 100
+  damage: 20
   movementSpeed: 5
 --- !u!50 &442754751
 Rigidbody2D:
@@ -876,18 +878,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.49337614}
   m_EdgeRadius: 0
---- !u!114 &442754755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 442754748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88faefb8dc2509b4384ce05b3a42bea9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &442754756
 MonoBehaviour:
   m_ObjectHideFlags: 0
