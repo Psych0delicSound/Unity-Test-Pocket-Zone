@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
+    public string type = "Slot";
     [NonSerialized] public GameObject currentItem;
     TextMeshProUGUI textItemStackCount;
 

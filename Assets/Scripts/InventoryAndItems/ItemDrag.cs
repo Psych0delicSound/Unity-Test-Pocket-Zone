@@ -40,13 +40,15 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
         else if (dropSlot != null)
         {
-            if (dropSlot.transform.name == "Destroyer")
+            transform.SetParent(dropSlot.transform);
+
+            if (dropSlot.type == "Destroyer")
             {
                 Destroy(originalSlot.gameObject);
                 Destroy(gameObject);
                 return;
             }
-            else if (dropSlot.transform.name == "InHand")
+            else if (dropSlot.type == "InHand")
             {
                 try
                 {
@@ -67,20 +69,18 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             {
                 dropSlot.currentItem.transform.SetParent(originalSlot.transform);
                 originalSlot.currentItem = dropSlot.currentItem;
-                dropSlot.currentItem.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+                 dropSlot.currentItem.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
             }
             else
             {
                 originalSlot.currentItem = null;
             }
-            transform.SetParent(dropSlot.transform);
             dropSlot.currentItem = gameObject;
+
+            if (originalSlot.type == "Slot") originalSlot.UpdateStackNumber(originalSlot.GetComponentInChildren<Item>().inStack);
+            if (dropSlot.type == "Slot") dropSlot.UpdateStackNumber(dropSlot.GetComponentInChildren<Item>().inStack);
         }
 
         GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-        originalSlot.UpdateStackNumber(originalSlot.GetComponentInChildren<Item>().inStack);
-        dropSlot.UpdateStackNumber(dropSlot.GetComponentInChildren<Item>().inStack);
-
-
     }
 }
