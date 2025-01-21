@@ -2,41 +2,35 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    float speed = 20f;
+    float speed = 20f, timeToDestroy = 2f;
     int damage = 10;
-    private Transform target;
+    Vector2 direction;
 
-    public void SetTarget(Transform newTarget, int newDamage)
+    public void SetDetails(int damageSet, Vector2 directionSet)
     {
-        target = newTarget;
-        damage = newDamage;
-    }
+        damage = damageSet;
+        direction = directionSet.normalized;
 
+        gameObject.GetComponent<Rigidbody2D>().AddForce(direction * speed * 100, ForceMode2D.Force); 
+    }
+    
     void Update()
     {
-        if (target != null)
-        {
-            Vector3 direction = (target.position - transform.position).normalized;
-            transform.position += direction * speed * Time.deltaTime;
-
-            if (Vector3.Distance(transform.position, target.position) < 0.5f)
-            {
-                HitTarget();
-            }
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (timeToDestroy > 0) timeToDestroy -= Time.unscaledDeltaTime;
+        else Destroy(gameObject);
     }
 
-    private void HitTarget()
+    private void HitTarget(Character character)
     {
-        Character character = target.GetComponent<Character>();
         if (character != null)
         {
             character.TakeDamage(damage);
         }
         Destroy(gameObject);
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Enemy") HitTarget(col.gameObject.GetComponent<Character>());
     }
 }

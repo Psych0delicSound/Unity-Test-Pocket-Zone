@@ -61,15 +61,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.6
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.6
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.6
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -85,7 +85,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalRotation.x
@@ -97,7 +97,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -117,7 +117,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -127,5 +127,32 @@ PrefabInstance:
       propertyPath: m_Name
       value: Item Horn
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8733793123428456794, guid: 586e4534332c75341beb1619a81390e6, type: 3}
+      propertyPath: m_TagString
+      value: Weapon
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1671198462396011106, guid: 586e4534332c75341beb1619a81390e6, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 586e4534332c75341beb1619a81390e6, type: 3}
+--- !u!1 &7635191878696455060 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8733793123428456794, guid: 586e4534332c75341beb1619a81390e6, type: 3}
+  m_PrefabInstance: {fileID: 1207259498068415182}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &916740167254821698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7635191878696455060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d85934f02c775f4db70eb1773e3ec0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 2
+  stackLimit: 1
+  inStack: 1
+  range: 1
+  cooldownTime: 1

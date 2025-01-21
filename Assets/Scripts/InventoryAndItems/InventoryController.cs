@@ -4,7 +4,7 @@ using UnityEngine;
 public class InventoryController : MonoBehaviour
 {
     ItemDictionary itemDictionary;
-    public Transform inventoryT, inventoryContent;
+    public Transform inventoryT, inventoryActionsT, inventoryContent;
     public GameObject slotPrefab;
 
     void Start()
@@ -15,6 +15,7 @@ public class InventoryController : MonoBehaviour
     public void InventoryTurning()
     {
         inventoryT.gameObject.SetActive(!inventoryT.gameObject.activeSelf);
+        inventoryActionsT.gameObject.SetActive(inventoryT.gameObject.activeSelf);
     }
 
     public void AddItem(GameObject itemGO)
@@ -31,7 +32,7 @@ public class InventoryController : MonoBehaviour
 
     void SameItemStackFilling(Item itemNew)
     {
-        for (int i = 1; i < inventoryContent.childCount; i++)
+        for (int i = 0; i < inventoryContent.childCount; i++)
         {
             Slot slot = inventoryContent.GetChild(i).GetComponent<Slot>();
             Item itemInSlot = slot.currentItem.GetComponent<Item>();
@@ -57,7 +58,7 @@ public class InventoryController : MonoBehaviour
     public List<SaveDataInventory> GetInventoryItems()
     {
         List<SaveDataInventory> dataInventory = new List<SaveDataInventory>();
-        for (int i = 1; i < inventoryContent.childCount; i++)
+        for (int i = 0; i < inventoryContent.childCount; i++)
         {
             Slot slot = inventoryContent.GetChild(i).GetComponent<Slot>();
             if (slot.currentItem != null)

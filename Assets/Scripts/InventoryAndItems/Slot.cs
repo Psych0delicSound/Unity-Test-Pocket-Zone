@@ -15,4 +15,9 @@ public class Slot : MonoBehaviour
         if (inStack > 1) textItemStackCount.text = $"{inStack}";
         else textItemStackCount.text = "";
     }
+
+    public void UpdateBulletsNumber(int bulletsLoaded)
+    {
+        textItemStackCount.text = $"{bulletsLoaded}";
+    }
 }

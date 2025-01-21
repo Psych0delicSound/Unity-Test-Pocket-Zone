@@ -11,6 +11,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 1b4696d341b6ec443b4e499361de0675, type: 3}
+    - target: {fileID: 1547734096895705643, guid: 586e4534332c75341beb1619a81390e6, type: 3}
+      propertyPath: m_Radius
+      value: 0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1547734096895705643, guid: 586e4534332c75341beb1619a81390e6, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 1547734096895705643, guid: 586e4534332c75341beb1619a81390e6, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.03
+      objectReference: {fileID: 0}
     - target: {fileID: 1671198462396011106, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: inStack
       value: 1
@@ -89,23 +101,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -1.4686263
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -0.87325215
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -126,6 +138,10 @@ PrefabInstance:
     - target: {fileID: 8733793123428456794, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_Name
       value: Item Makarov
+      objectReference: {fileID: 0}
+    - target: {fileID: 8733793123428456794, guid: 586e4534332c75341beb1619a81390e6, type: 3}
+      propertyPath: m_TagString
+      value: Weapon
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1671198462396011106, guid: 586e4534332c75341beb1619a81390e6, type: 3}
@@ -151,7 +167,7 @@ MonoBehaviour:
   stackLimit: 1
   inStack: 1
   range: 2
-  cooldownTime: 2
-  bulletsLoaded: 0
+  cooldownTime: 1
+  bulletsLoaded: 2
   bulletsLoadLimit: 8
   projectilePrefab: {fileID: 6136071427097125928, guid: 77ff110a000ce7b499a92fa3a72d94d2, type: 3}

@@ -1,15 +1,16 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : Character
 {
-	Vector2 movementInput;
+	Vector2 movementInput, directionInput;
     Weapon equippedWeapon;
+    [SerializeField] Transform handWithGunT;
 
     protected override void Start()
     {
         base.Start();
+        directionInput = new Vector2(1, 0);
     }
 
     protected void Update()
@@ -17,26 +18,37 @@ public class Player : Character
         base.Move(movementInput);
     }
 
-	protected override void Attack(Character target)
+	override public void Attack()
 	{
-        if ( equippedWeapon == null) return; //target == null ||
+        if ( equippedWeapon == null) return;
 
-        base.Attack(target);
+        equippedWeapon.Attack(this, directionInput);
 	}
 
-	protected void Move(InputAction.CallbackContext context)
+	public void Move(InputAction.CallbackContext context)
     {
         movementInput = context.ReadValue<Vector2>(); 
+    }
+
+    public void Look(InputAction.CallbackContext context)
+    {
+        if (context.ReadValue<Vector2>() != Vector2.zero) directionInput = context.ReadValue<Vector2>().normalized;
+        
+        handWithGunT.rotation = Quaternion.LookRotation(Vector3.forward, -directionInput);
     }
 
     public void EquipWeapon(Weapon newWeapon)
     {
         equippedWeapon = newWeapon;
-        Debug.Log("Equipped: " + newWeapon.GetType().Name);
     }
 
     public void UnequipWeapon()
     {
         equippedWeapon = null;
+    }
+
+    public Weapon GetWeapon()
+    {
+        return equippedWeapon;
     }
 }

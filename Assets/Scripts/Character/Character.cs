@@ -8,8 +8,8 @@ public abstract class Character : MonoBehaviour
     [SerializeField] int damage;
 	[SerializeField] float movementSpeed;
     Rigidbody2D rb;
-
     [NonSerialized] public bool isDead = false;
+    [SerializeField] Vector2 weaponPosition;
 
     protected virtual void Start()
     {
@@ -35,17 +35,19 @@ public abstract class Character : MonoBehaviour
         }
     }
 
-    protected virtual void Attack(Character target)
+    virtual public void Attack()
     {
         if (isDead) return;
-
-        Debug.Log($"{gameObject.name} is attacking {target.gameObject.name}");
-        target.TakeDamage(damage);
     }
 
     protected virtual void Die()
     {
         isDead = true;
         Debug.Log($"{gameObject.name} has died");
+    }
+
+    public Vector2 GetWeaponPosition()
+    {
+        return weaponPosition;
     }
 }

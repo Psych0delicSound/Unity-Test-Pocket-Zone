@@ -9,7 +9,7 @@ public class ItemPickup : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.CompareTag("Item"))
+        if (col.CompareTag("Item") || col.CompareTag("Weapon"))
         {
             Item item = col.GetComponent<Item>();
             if (item != null)

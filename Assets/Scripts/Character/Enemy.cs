@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Enemy : Character
 {
+    //lastAttacker for kill count
     protected override void Start()
     {
         base.Start();
@@ -9,10 +10,10 @@ public class Enemy : Character
 
     void Update()
     {
-        Player player = FindObjectOfType<Player>();
-        if (Vector3.Distance(transform.position, player.transform.position) < 5f)
-        {
-            Attack(player);
-        }
+        // Player player = FindObjectOfType<Player>();
+        // if (Vector3.Distance(transform.position, player.transform.position) < 5f)
+        // {
+        //     Attack(player);
+        // }
     }
 }

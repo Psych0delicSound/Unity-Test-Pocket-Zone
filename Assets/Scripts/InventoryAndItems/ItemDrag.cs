@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,11 +6,13 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     Transform originalParent;
     CanvasGroup canvasGroup;
     Player player;
+    GameController gameController;
 
     void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        gameController = GameObject.Find("GameController").GetComponent<GameController>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -32,53 +33,51 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         Slot dropSlot = eventData.pointerEnter?.GetComponent<Slot>();
         Slot originalSlot = originalParent.GetComponent<Slot>();
 
-        if (dropSlot == null)
+        if (dropSlot == null || (originalSlot.type == "InHand" && dropSlot.currentItem.tag != "Weapon") || (dropSlot.type == "InHand" && originalSlot.currentItem.tag != "Weapon"))
         {
             GameObject dropItem = eventData.pointerEnter;
             if (dropItem != null) dropSlot = dropItem.GetComponentInParent<Slot>();
-            transform.SetParent(originalParent);
         }
-        else if (dropSlot != null)
-        {
-            transform.SetParent(dropSlot.transform);
 
+        if (dropSlot != null)
+        {
             if (dropSlot.type == "Destroyer")
             {
                 Destroy(originalSlot.gameObject);
                 Destroy(gameObject);
                 return;
             }
-            else if (dropSlot.type == "InHand")
+            else if (dropSlot.type == "InHand" && originalSlot.currentItem.tag == "Weapon")
             {
-                try
-                {
-                    player.EquipWeapon(originalSlot.currentItem.GetComponent<Weapon>());
-                }
-                catch (Exception e)
-                {
-                    Debug.Log(e.Message);
-
-                    transform.SetParent(originalParent);
-                    GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-                    originalSlot.UpdateStackNumber(originalSlot.GetComponentInChildren<Item>().inStack);
-
-                    return;
-                }
+                player.EquipWeapon(originalSlot.currentItem.GetComponent<Weapon>());
+                transform.SetParent(dropSlot.transform);
             }
+
             if (dropSlot.currentItem != null)
             {
                 dropSlot.currentItem.transform.SetParent(originalSlot.transform);
                 originalSlot.currentItem = dropSlot.currentItem;
-                 dropSlot.currentItem.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+                dropSlot.currentItem.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
             }
             else
             {
                 originalSlot.currentItem = null;
             }
+
+            transform.SetParent(dropSlot.transform);
             dropSlot.currentItem = gameObject;
 
-            if (originalSlot.type == "Slot") originalSlot.UpdateStackNumber(originalSlot.GetComponentInChildren<Item>().inStack);
-            if (dropSlot.type == "Slot") dropSlot.UpdateStackNumber(dropSlot.GetComponentInChildren<Item>().inStack);
+            if (originalSlot.currentItem != null) originalSlot.UpdateStackNumber(originalSlot.currentItem.GetComponent<Item>().inStack);
+            if (dropSlot.currentItem != null) dropSlot.UpdateStackNumber(dropSlot.currentItem.GetComponent<Item>().inStack);
+            if (dropSlot.type == "InHand" && dropSlot.currentItem.tag == "Weapon")
+            {
+                gameController.UpdateBulletsCount();
+                Destroy(originalSlot.gameObject);
+            }
+        }
+        else
+        {
+            transform.SetParent(originalParent);
         }
 
         GetComponent<RectTransform>().anchoredPosition = Vector2.zero;

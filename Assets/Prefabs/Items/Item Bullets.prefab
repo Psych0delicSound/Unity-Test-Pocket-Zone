@@ -12,8 +12,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: d45f0cae013abb84688afe6e4bc52845, type: 3}
     - target: {fileID: 1671198462396011106, guid: 586e4534332c75341beb1619a81390e6, type: 3}
+      propertyPath: id
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1671198462396011106, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: inStack
-      value: 4
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 1671198462396011106, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: stackLimit
@@ -89,15 +93,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -125,7 +129,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8733793123428456794, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_Name
-      value: Item Bullets Variant
+      value: Item Bullets
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 586e4534332c75341beb1619a81390e6, type: 3}

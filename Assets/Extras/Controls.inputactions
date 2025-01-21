@@ -1,5 +1,5 @@
 {
-    "name": "Player",
+    "name": "Controls",
     "maps": [
         {
             "name": "Player",
@@ -160,17 +160,6 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7e09f25a-2783-4447-81a5-ffa6175d9a96",
-                    "path": "<Pointer>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse;Touch",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
