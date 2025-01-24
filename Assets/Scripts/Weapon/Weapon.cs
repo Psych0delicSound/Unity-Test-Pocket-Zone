@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class Weapon : Item
 {
-    public const int damage = 10;
+    public int damage = 10;
     public float range = 2f, cooldownTime = 1f;
     [NonSerialized] public float cooldown = 0f;
 

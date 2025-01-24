@@ -8,7 +8,7 @@ public class InventoryController : MonoBehaviour
 {
     [SerializeField] private ItemDictionary itemDictionary;
     [SerializeField] private int initialSlots = 20;
-    [SerializeField] private Transform inventoryT, inventoryContentT, inventoryBinT;
+    [SerializeField] private Transform inventoryT, inventoryContentT, inventoryBinT, attackButtonT, stickRT;
     [SerializeField] private GameObject slotPrefab;
     public GameController gameController;
     public Slot slotInHand;
@@ -27,7 +27,10 @@ public class InventoryController : MonoBehaviour
     {
         inventoryT.gameObject.SetActive(!inventoryT.gameObject.activeSelf);
         inventoryBinT.gameObject.SetActive(inventoryT.gameObject.activeSelf);
-        if (slotInHand.GetCurrentItem) slotInHand.GetCurrentItem.GetComponent<ItemDrag>().enabled = inventoryT.gameObject.activeSelf;
+        if (slotInHand.GetCurrentItem)
+            slotInHand.GetCurrentItem.GetComponent<ItemDrag>().enabled = inventoryT.gameObject.activeSelf;
+        attackButtonT.gameObject.SetActive(!inventoryT.gameObject.activeSelf);
+        stickRT.gameObject.SetActive(!inventoryT.gameObject.activeSelf);
     }
 
     private void InitializeSlots()

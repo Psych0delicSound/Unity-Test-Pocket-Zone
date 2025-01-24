@@ -25,11 +25,11 @@ public class Projectile : MonoBehaviour
         if (character != null)
         {
             character.TakeDamage(damage);
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Enemy") HitTarget(col.gameObject.GetComponent<Character>());
     }
