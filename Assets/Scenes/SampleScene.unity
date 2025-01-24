@@ -1100,10 +1100,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 100
-  damage: 20
   movementSpeed: 5
   weaponPosition: {fileID: 774305200}
   handWithGunT: {fileID: 88675655}
+  inventoryController: {fileID: 984658831}
 --- !u!50 &442754751
 Rigidbody2D:
   serializedVersion: 4
@@ -3987,7 +3987,7 @@ MonoBehaviour:
   initialSlots: 20
   inventoryT: {fileID: 1756661256}
   inventoryContentT: {fileID: 1281707725}
-  inventoryActionsT: {fileID: 878154351}
+  inventoryBinT: {fileID: 1774798546}
   slotPrefab: {fileID: 6424644758754011831, guid: 03636f2f3f10f944ba6fe5406696cc69, type: 3}
   gameController: {fileID: 984658834}
   slotInHand: {fileID: 1001451359}
