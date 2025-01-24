@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
 {
-    InventoryController inventoryController;
-    void Start()
-    {
-        inventoryController = FindObjectOfType<InventoryController>();
-    }
+    private InventoryController inventory;
+
+    void Start() => inventory = FindObjectOfType<InventoryController>();
+
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Item") || col.CompareTag("Weapon"))
@@ -14,8 +13,8 @@ public class ItemPickup : MonoBehaviour
             Item item = col.GetComponent<Item>();
             if (item != null)
             {
-                inventoryController.AddItem(col.gameObject);
-                Destroy(col.gameObject);
+                inventory.AddItem(item);
+                //Destroy(col);
             }
         }
     }

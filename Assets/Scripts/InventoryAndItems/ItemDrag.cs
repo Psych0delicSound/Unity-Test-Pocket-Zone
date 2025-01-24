@@ -3,21 +3,24 @@ using UnityEngine.EventSystems;
 
 public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    Transform originalParent;
-    CanvasGroup canvasGroup;
-    Player player;
-    GameController gameController;
+    private Transform originalParent;
+    private CanvasGroup canvasGroup;
+    private Slot originalSlot;
+    private RectTransform rectTransform;
+    private Item item;
 
     void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        rectTransform = GetComponent<RectTransform>();
+        item = GetComponent<Item>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         originalParent = transform.parent;
+        originalSlot = originalParent.GetComponent<Slot>();
+
         transform.SetParent(transform.root);
         canvasGroup.blocksRaycasts = false;
     }
@@ -30,56 +33,58 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void OnEndDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = true;
-        Slot dropSlot = eventData.pointerEnter?.GetComponent<Slot>();
-        Slot originalSlot = originalParent.GetComponent<Slot>();
+        Slot targetSlot = GetDropSlot(eventData);
+        HandleDropLogic(targetSlot);
+    }
 
-        if (dropSlot == null || (originalSlot.type == "InHand" && dropSlot.currentItem.tag != "Weapon") || (dropSlot.type == "InHand" && originalSlot.currentItem.tag != "Weapon"))
+    private Slot GetDropSlot(PointerEventData eventData)
+    {
+        GameObject dropObject = eventData.pointerEnter;
+        return dropObject?.GetComponent<Slot>() ?? dropObject?.GetComponentInParent<Slot>();
+    }
+
+    private void HandleDropLogic(Slot targetSlot)
+    {
+        if (!ValidateDrop(targetSlot))
         {
-            GameObject dropItem = eventData.pointerEnter;
-            if (dropItem != null) dropSlot = dropItem.GetComponentInParent<Slot>();
+            ResetPosition();
+            return;
         }
 
-        if (dropSlot != null)
+        if (targetSlot.type == SlotType.Destroyer)
         {
-            if (dropSlot.type == "Destroyer")
-            {
-                Destroy(originalSlot.gameObject);
-                Destroy(gameObject);
-                return;
-            }
-            else if (dropSlot.type == "InHand" && originalSlot.currentItem.tag == "Weapon")
-            {
-                player.EquipWeapon(originalSlot.currentItem.GetComponent<Weapon>());
-                transform.SetParent(dropSlot.transform);
-            }
-
-            if (dropSlot.currentItem != null)
-            {
-                dropSlot.currentItem.transform.SetParent(originalSlot.transform);
-                originalSlot.currentItem = dropSlot.currentItem;
-                dropSlot.currentItem.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
-            }
-            else
-            {
-                originalSlot.currentItem = null;
-            }
-
-            transform.SetParent(dropSlot.transform);
-            dropSlot.currentItem = gameObject;
-
-            if (originalSlot.currentItem != null) originalSlot.UpdateStackNumber(originalSlot.currentItem.GetComponent<Item>().inStack);
-            if (dropSlot.currentItem != null) dropSlot.UpdateStackNumber(dropSlot.currentItem.GetComponent<Item>().inStack);
-            if (dropSlot.type == "InHand" && dropSlot.currentItem.tag == "Weapon")
-            {
-                gameController.UpdateBulletsCount();
-                Destroy(originalSlot.gameObject);
-            }
-        }
-        else
-        {
-            transform.SetParent(originalParent);
+            HandleItemDestroy();
+            return;
         }
 
-        GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        originalSlot.inventory.HandleItemMove(originalSlot.SlotIndex, targetSlot.SlotIndex);
+    }
+
+    private bool ValidateDrop(Slot targetSlot)
+    {
+        if (originalSlot == null || targetSlot == null || originalSlot.inventory == null)
+            return false;
+
+        Item sourceData = originalSlot.inventory.GetSlotItem(originalSlot.SlotIndex);
+        
+        if (sourceData.id == -1) return false;
+
+        if (targetSlot.type == SlotType.InHand && item is Weapon)
+            return true;
+
+        return true;
+    }
+
+    private void ResetPosition()
+    {
+        transform.SetParent(originalParent);
+        rectTransform.anchoredPosition = Vector2.zero;
+    }
+
+    void HandleItemDestroy()
+    {
+        Destroy(gameObject);
+        originalSlot.inventory.inventoryData[originalSlot.SlotIndex] = null;
+        originalSlot.inventory.ClearAndUpdateSlots();
     }
 }

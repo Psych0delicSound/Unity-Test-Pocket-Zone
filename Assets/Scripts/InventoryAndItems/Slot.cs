@@ -4,20 +4,60 @@ using UnityEngine;
 
 public class Slot : MonoBehaviour
 {
-    public string type = "Slot";
-    [NonSerialized] public GameObject currentItem;
-    TextMeshProUGUI textItemStackCount;
+    public SlotType type;
+    private TextMeshProUGUI stackText;
+    private int slotIndex;
+    [NonSerialized] public InventoryController inventory;
+    private Item currentItem;
+    public int SlotIndex => slotIndex;
 
-    public void UpdateStackNumber(int inStack)
+    public Item GetCurrentItem() => currentItem;
+
+    public void Initialize(int index, InventoryController controller)
     {
-        textItemStackCount = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-
-        if (inStack > 1) textItemStackCount.text = $"{inStack}";
-        else textItemStackCount.text = "";
+        slotIndex = index;
+        inventory = controller;
+        stackText = GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    public void UpdateBulletsNumber(int bulletsLoaded)
+    public void UpdateSlot()
     {
-        textItemStackCount.text = $"{bulletsLoaded}";
+        currentItem = inventory.inventoryData[SlotIndex];
+
+        if (currentItem == null)
+        {
+            stackText.text = "";
+            return;
+        }
+
+        currentItem.transform.SetParent(transform);
+        currentItem.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        
+        if (type == SlotType.InHand)
+        {
+            Debug.Log("InHand");
+            if (currentItem is Weapon)
+            {
+                Debug.Log("Weapon");
+                inventory.gameController.player.EquipWeapon((Weapon)currentItem);
+            }
+            if (currentItem is WeaponFirearm)
+            {
+                Debug.Log("WeaponFirearm");
+                UpdateBulletDisplay();
+                ((WeaponFirearm)currentItem).OnBulletsChanged += UpdateBulletDisplay;
+                stackText.text = ((WeaponFirearm)currentItem).bulletsLoaded.ToString();
+            }
+        }
+        else
+        {
+            stackText.text = currentItem.inStack > 1 ? currentItem.inStack.ToString() : "";
+        }
+    }
+
+    private void UpdateBulletDisplay()
+    {
+        Item item = inventory.GetSlotItem(slotIndex);
+        stackText.text = ((WeaponFirearm)item).bulletsLoaded.ToString();
     }
 }

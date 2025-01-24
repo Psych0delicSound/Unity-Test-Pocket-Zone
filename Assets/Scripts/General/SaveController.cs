@@ -11,7 +11,7 @@ public class SaveController : MonoBehaviour
 	void Start()
 	{
 		saveLocation = Path.Combine(Application.persistentDataPath, "saveData.json");
-		inventoryController = GameObject.FindObjectOfType<InventoryController>();
+		inventoryController = FindObjectOfType<InventoryController>();
 		playerT = GameObject.FindGameObjectWithTag("Player").transform;
 
 		LoadGame();
@@ -27,7 +27,7 @@ public class SaveController : MonoBehaviour
 		SaveData saveData = new SaveData
 		{
 			playerPosition = playerT.position,
-			saveDataInventory = inventoryController.GetInventoryItems()
+			saveDataInventory = inventoryController.inventoryData
 		};
 
 		File.WriteAllText(saveLocation, JsonUtility.ToJson(saveData));

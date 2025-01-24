@@ -1,9 +1,16 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class WeaponFirearm : Weapon
 {
     public int bulletsLoaded = 0, bulletsLoadLimit = 8;
-    public GameObject projectilePrefab;
+    GameObject projectilePrefab;
+    public event UnityAction OnBulletsChanged;
+
+    void Start()
+    {
+        projectilePrefab = Resources.Load<GameObject>("Prefabs/Projectile");
+    }
 
     public override void Attack(Character attacker, Vector2 direction)
     {
@@ -11,6 +18,11 @@ public class WeaponFirearm : Weapon
 
         ShootProjectile(attacker.GetWeaponPosition(), direction);
         cooldown = cooldownTime;
+    }
+
+    public void Reload()
+    {
+        //
     }
 
     private void ShootProjectile(Vector2 projectileSpawnpoint, Vector2 direction)
@@ -23,7 +35,13 @@ public class WeaponFirearm : Weapon
         {
             projectileScript.SetDetails(damage, direction);
             bulletsLoaded--;
-            gameController.UpdateBulletsCount();
+            UpdateBulletsNumber(bulletsLoaded);
         }
+    }
+
+    public void UpdateBulletsNumber(int newCount)
+    {
+        bulletsLoaded = newCount;
+        OnBulletsChanged?.Invoke();
     }
 }

@@ -6,5 +6,5 @@ using UnityEngine;
 public class SaveData
 {
 	public Vector3 playerPosition;
-	public List<SaveDataInventory> saveDataInventory;
+	public List<Item> saveDataInventory;
 }
