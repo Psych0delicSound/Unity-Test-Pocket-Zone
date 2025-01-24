@@ -6,6 +6,7 @@ public class WeaponFirearm : Weapon
     public int bulletsLoaded = 0, bulletsLoadLimit = 8;
     GameObject projectilePrefab;
     public event UnityAction OnBulletsChanged;
+    public int requiredAmmoID = 1;
 
     void Start()
     {
@@ -27,7 +28,24 @@ public class WeaponFirearm : Weapon
 
     public void Reload()
     {
-        Debug.Log("R");
+        if (bulletsLoaded >= bulletsLoadLimit) return;
+
+        InventoryController inventory = FindObjectOfType<InventoryController>();
+        int ammoAvailable = inventory.GetAmmoCount(requiredAmmoID);
+        int bulletsNeeded = bulletsLoadLimit - bulletsLoaded;
+        int ammoToUse = Mathf.Min(ammoAvailable, bulletsNeeded);
+
+        if (ammoToUse > 0)
+        {
+            inventory.DecreaseItemStack(requiredAmmoID, ammoToUse);
+            bulletsLoaded += ammoToUse;
+            UpdateBulletsNumber(bulletsLoaded);
+            Debug.Log($"Reloaded {ammoToUse} bullets.");
+        }
+        else
+        {
+            Debug.Log("No ammo available.");
+        }
     }
 
     private void ShootProjectile(Transform projectileSpawnpoint, Vector2 direction)

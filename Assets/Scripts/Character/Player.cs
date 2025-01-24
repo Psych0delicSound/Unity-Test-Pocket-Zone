@@ -7,6 +7,7 @@ public class Player : Character
     private Weapon equippedWeapon;
     public Weapon GetEquippedWeapon => equippedWeapon;
     [SerializeField] private Transform handWithGunT;
+    public InventoryController inventoryController;
 
     protected override void Start()
     {
@@ -36,6 +37,14 @@ public class Player : Character
         if (context.ReadValue<Vector2>() != Vector2.zero) directionInput = context.ReadValue<Vector2>().normalized;
         
         handWithGunT.rotation = Quaternion.LookRotation(Vector3.forward, -directionInput);
+    }
+
+    public void Reload()
+    {
+        if (equippedWeapon is WeaponFirearm)
+        {
+            ((WeaponFirearm)equippedWeapon).Reload();
+        }
     }
 
     public void EquipWeapon(Weapon newWeapon)

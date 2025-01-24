@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,7 +8,7 @@ public class InventoryController : MonoBehaviour
 {
     [SerializeField] private ItemDictionary itemDictionary;
     [SerializeField] private int initialSlots = 20;
-    [SerializeField] private Transform inventoryT, inventoryContentT, inventoryActionsT;
+    [SerializeField] private Transform inventoryT, inventoryContentT, inventoryBinT;
     [SerializeField] private GameObject slotPrefab;
     public GameController gameController;
     public Slot slotInHand;
@@ -21,12 +20,14 @@ public class InventoryController : MonoBehaviour
         InitializeSlots();
         inventoryData = new List<Item>(initialSlots); 
         slotInHand.Initialize(-1, this);
+        InventoryTurning();
     }
 
     public void InventoryTurning()
     {
         inventoryT.gameObject.SetActive(!inventoryT.gameObject.activeSelf);
-        inventoryActionsT.gameObject.SetActive(inventoryT.gameObject.activeSelf);
+        inventoryBinT.gameObject.SetActive(inventoryT.gameObject.activeSelf);
+        if (slotInHand.GetCurrentItem) slotInHand.GetCurrentItem.GetComponent<ItemDrag>().enabled = inventoryT.gameObject.activeSelf;
     }
 
     private void InitializeSlots()
@@ -160,4 +161,33 @@ public class InventoryController : MonoBehaviour
             UpdateSlotData(inventoryData[i]);
         }
     }
+
+    public int GetAmmoCount(int ammoId)
+    {
+        return inventoryData
+            .Where(item => item != null && item.id == ammoId)
+            .Sum(item => item.inStack);
+    }
+
+    public void DecreaseItemStack(int itemID, int amount)
+{
+    int remaining = amount;
+    List<Item> itemsToCheck = inventoryData.Where(item => item != null && item.id == itemID).ToList();
+
+    foreach (Item item in itemsToCheck)
+    {
+        if (remaining <= 0) break;
+        int deduct = Mathf.Min(item.inStack, remaining);
+        item.inStack -= deduct;
+        remaining -= deduct;
+
+        if (item.inStack <= 0)
+        {
+            inventoryData.Remove(item);
+            Destroy(item.gameObject);
+        }
+    }
+
+    ClearAndUpdateSlots();
+}
 }
