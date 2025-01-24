@@ -9,27 +9,33 @@ public class WeaponFirearm : Weapon
 
     void Start()
     {
-        projectilePrefab = Resources.Load<GameObject>("Prefabs/Projectile");
+        projectilePrefab = Resources.Load("Prefabs/General/Projectile") as GameObject;
     }
 
     public override void Attack(Character attacker, Vector2 direction)
     {
-        if (!CanAttack() || bulletsLoaded < 1) return;
+        if (!CanAttack()) return;
+        if (bulletsLoaded < 1)
+        {
+            Reload();
+            return;
+        }
 
-        ShootProjectile(attacker.GetWeaponPosition(), direction);
+        ShootProjectile(attacker.weaponPosition, direction);
         cooldown = cooldownTime;
     }
 
     public void Reload()
     {
-        //
+        Debug.Log("R");
     }
 
-    private void ShootProjectile(Vector2 projectileSpawnpoint, Vector2 direction)
+    private void ShootProjectile(Transform projectileSpawnpoint, Vector2 direction)
     {
         if (projectilePrefab == null) return;
 
-        GameObject projectile = Instantiate(projectilePrefab, projectileSpawnpoint, Quaternion.identity);
+        GameObject projectile = Instantiate(projectilePrefab, projectileSpawnpoint.position, Quaternion.identity);
+
         Projectile projectileScript = projectile.GetComponent<Projectile>();
         if (projectileScript != null)
         {

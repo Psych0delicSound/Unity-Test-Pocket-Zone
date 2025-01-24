@@ -57,20 +57,22 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             return;
         }
 
+        if (targetSlot.type == SlotType.InHand)
+        {
+            originalSlot.inventory.EquipWeapon(targetSlot.SlotIndex, (Weapon)originalSlot.GetCurrentItem);
+            return;
+        }
+
         originalSlot.inventory.HandleItemMove(originalSlot.SlotIndex, targetSlot.SlotIndex);
     }
 
     private bool ValidateDrop(Slot targetSlot)
     {
-        if (originalSlot == null || targetSlot == null || originalSlot.inventory == null)
-            return false;
-
-        Item sourceData = originalSlot.inventory.GetSlotItem(originalSlot.SlotIndex);
-        
-        if (sourceData.id == -1) return false;
-
-        if (targetSlot.type == SlotType.InHand && item is Weapon)
-            return true;
+        if (originalSlot == null ||
+            targetSlot == null ||
+            originalSlot.inventory == null ||
+            targetSlot.type == SlotType.InHand && !(item is Weapon))
+                return false;
 
         return true;
     }

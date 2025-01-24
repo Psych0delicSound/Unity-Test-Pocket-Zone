@@ -3,14 +3,15 @@ using UnityEngine.InputSystem;
 
 public class Player : Character
 {
-	Vector2 movementInput, directionInput;
-    Weapon equippedWeapon;
-    [SerializeField] Transform handWithGunT;
+	private Vector2 movementInput, directionInput;
+    private Weapon equippedWeapon;
+    public Weapon GetEquippedWeapon => equippedWeapon;
+    [SerializeField] private Transform handWithGunT;
 
     protected override void Start()
     {
         base.Start();
-        directionInput = new Vector2(1, 0);
+        directionInput = new Vector2(0, -1);
     }
 
     protected void Update()

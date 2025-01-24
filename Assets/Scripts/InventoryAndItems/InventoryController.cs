@@ -20,6 +20,7 @@ public class InventoryController : MonoBehaviour
     {
         InitializeSlots();
         inventoryData = new List<Item>(initialSlots); 
+        slotInHand.Initialize(-1, this);
     }
 
     public void InventoryTurning()
@@ -50,38 +51,41 @@ public class InventoryController : MonoBehaviour
         }
     }
 
-    public Item GetSlotItem(int slotIndex)
+    public void HandleItemMove(int originalIndex, int targetIndex)
     {
-        return inventoryData[slotIndex];
-    }
-
-    public void UpdateSlotData(int slotIndex)
-    {
-        slots[slotIndex].UpdateSlot();
-    }
-
-    public void HandleItemMove(int sourceIndex, int targetIndex)
-    {
-        if (sourceIndex >= inventoryData.Count || targetIndex >= inventoryData.Count)
+        if (originalIndex >= inventoryData.Count || targetIndex >= inventoryData.Count)
         {
-            if (sourceIndex >= slots.Count || targetIndex >= slots.Count) return;
+            if (originalIndex >= slots.Count || targetIndex >= slots.Count) return;
             inventoryData.Add(null);
             targetIndex = inventoryData.Count -1;
         }
         
-        Item temp = inventoryData[sourceIndex];
-        inventoryData[sourceIndex] = inventoryData[targetIndex];
+        Item temp = inventoryData[originalIndex];
+        inventoryData[originalIndex] = inventoryData[targetIndex];
         inventoryData[targetIndex] = temp;
 
         ClearAndUpdateSlots();
     }
 
+    public void EquipWeapon(int originalIndex, Weapon weapon)
+    {
+        if (weapon == null) return;
+        if (slotInHand.GetCurrentItem != null) inventoryData[originalIndex] = slotInHand.GetCurrentItem;
+
+        gameController.player.EquipWeapon(weapon);
+        slotInHand.SetCurrentItem(weapon);
+        slotInHand.UpdateSlot();
+        inventoryData.Remove(weapon);
+        ClearAndUpdateSlots();
+    }
+
     public void AddItem(Item item)
     {
-        if (TryStackItem(item)) return;
-        if (TryAddToEmptySlot(item)) return;
-        
-        Debug.Log("Inventory full");
+        if (TryStackItem(item) || TryAddToEmptySlot(item))
+        {
+            ClearAndUpdateSlots();
+        }
+        else Debug.Log("Inventory full");
     }
 
     private bool TryStackItem(Item newItem)
@@ -96,13 +100,11 @@ public class InventoryController : MonoBehaviour
             if (newItem.inStack <= remainingSpace)
             {
                 itemForStack.inStack += newItem.inStack;
-                UpdateSlotData(i);
                 return true;
             }
 
             newItem.inStack -= remainingSpace;
             itemForStack.inStack = newItem.stackLimit;
-            UpdateSlotData(i);
         }
         return false;
     }
@@ -111,12 +113,11 @@ public class InventoryController : MonoBehaviour
     {
         for (int i = 0; i < slots.Count; i++)
         {
-            if (slots[i].GetCurrentItem() != null) continue;
+            if (slots[i].GetCurrentItem != null) continue;
 
             if (inventoryData.Count - 1 < i) inventoryData.Add(item);
             else inventoryData[i] = item;
 
-            ClearAndUpdateSlots();
             return true;
         }
         return false;
@@ -134,12 +135,29 @@ public class InventoryController : MonoBehaviour
         return itemDictionary.GetItemPrefab(id);
     }
 
+    public void UpdateSlotData(Item item)
+    {
+        int index = inventoryData.IndexOf(item);
+        slots[index].SetCurrentItem(item);
+        slots[index].UpdateSlot();
+    }
+
+    void ClearStacks()
+    {
+        int x = inventoryData.Count < slots.Count ? 1 : 0;
+        for (int i = 0; i < inventoryData.Count + x; i++)
+        {
+            slots[i].ClearStack();
+        }
+    }
+
     public void ClearAndUpdateSlots()
     {
+        ClearStacks();
         inventoryData = inventoryData.Where(item => item != null).ToList();
         for (int i = 0; i < inventoryData.Count; i++)
         {
-            UpdateSlotData(i);
+            UpdateSlotData(inventoryData[i]);
         }
     }
 }

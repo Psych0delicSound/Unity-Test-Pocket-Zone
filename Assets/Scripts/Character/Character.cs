@@ -5,11 +5,10 @@ public abstract class Character : MonoBehaviour
 {
     [SerializeField] int maxHealth;
     [SerializeField] int currentHealth;
-    [SerializeField] int damage;
 	[SerializeField] float movementSpeed;
     Rigidbody2D rb;
     [NonSerialized] public bool isDead = false;
-    [SerializeField] Vector2 weaponPosition;
+    public Transform weaponPosition;
 
     protected virtual void Start()
     {
@@ -44,10 +43,5 @@ public abstract class Character : MonoBehaviour
     {
         isDead = true;
         Debug.Log($"{gameObject.name} has died");
-    }
-
-    public Vector2 GetWeaponPosition()
-    {
-        return weaponPosition;
     }
 }
