@@ -71,8 +71,9 @@ public class InventoryController : MonoBehaviour
         ClearAndUpdateSlots();
     }
 
-    public void EquipWeapon(int originalIndex, Weapon weapon)
+    public void EquipWeapon(int originalIndex)
     {
+        Weapon weapon = (Weapon)slots[originalIndex].GetCurrentItem;
         if (weapon == null) return;
         if (slotInHand.GetCurrentItem != null) inventoryData[originalIndex] = slotInHand.GetCurrentItem;
 

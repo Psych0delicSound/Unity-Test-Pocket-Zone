@@ -5,7 +5,7 @@ public abstract class Character : MonoBehaviour
 {
     [SerializeField] int maxHealth;
     [SerializeField] int currentHealth;
-	[SerializeField] float movementSpeed;
+	[SerializeField] protected float movementSpeed;
     Rigidbody2D rb;
     [NonSerialized] public bool isDead = false;
     public Transform weaponPosition;
