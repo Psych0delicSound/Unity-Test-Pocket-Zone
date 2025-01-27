@@ -103,8 +103,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 100
+  strength: 4
   movementSpeed: 2
   weaponPosition: {fileID: 0}
+  cooldownTime: 2
 --- !u!50 &7692463858827747157
 Rigidbody2D:
   serializedVersion: 4
