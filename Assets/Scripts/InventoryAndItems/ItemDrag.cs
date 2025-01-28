@@ -59,7 +59,7 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         if (targetSlot.type == SlotType.InHand)
         {
-            originalSlot.inventory.EquipWeapon(originalSlot.SlotIndex);
+            originalSlot.inventory.EquipWeapon((Weapon)originalSlot.GetCurrentItem);
             return;
         }
 

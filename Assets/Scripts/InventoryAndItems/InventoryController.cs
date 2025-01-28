@@ -18,7 +18,6 @@ public class InventoryController : MonoBehaviour
     void Start()
     {
         InitializeSlots();
-        inventoryData = new List<Item>(initialSlots); 
         slotInHand.Initialize(-1, this);
         InventoryTurning();
     }
@@ -71,11 +70,10 @@ public class InventoryController : MonoBehaviour
         ClearAndUpdateSlots();
     }
 
-    public void EquipWeapon(int originalIndex)
+    public void EquipWeapon(Weapon weapon)
     {
-        Weapon weapon = (Weapon)slots[originalIndex].GetCurrentItem;
         if (weapon == null) return;
-        if (slotInHand.GetCurrentItem != null) inventoryData[originalIndex] = slotInHand.GetCurrentItem;
+        //if (slotInHand.GetCurrentItem != null) inventoryData[originalIndex] = slotInHand.GetCurrentItem;
 
         gameController.player.EquipWeapon(weapon);
         slotInHand.SetCurrentItem(weapon);

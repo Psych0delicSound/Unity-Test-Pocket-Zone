@@ -5,7 +5,6 @@ public class SaveController : MonoBehaviour
 {
 	string saveLocation;
 	InventoryController inventoryController;
-
 	Transform playerT;
 
 	void Start()
@@ -27,9 +26,9 @@ public class SaveController : MonoBehaviour
 		SaveData saveData = new SaveData
 		{
 			playerPosition = playerT.position,
-			saveDataInventory = inventoryController.inventoryData
+			saveDataInventory = inventoryController.inventoryData,
+			equippedWeapon = (Weapon)inventoryController.slotInHand.GetCurrentItem
 		};
-
 		File.WriteAllText(saveLocation, JsonUtility.ToJson(saveData));
 	}
 
@@ -40,6 +39,7 @@ public class SaveController : MonoBehaviour
 			SaveData saveData = JsonUtility.FromJson<SaveData>(File.ReadAllText(saveLocation));
 			playerT.position = saveData.playerPosition;
 			inventoryController.SetInventoryItems(saveData.saveDataInventory);
+			inventoryController.EquipWeapon(saveData.equippedWeapon);
 		}
 		else
 		{

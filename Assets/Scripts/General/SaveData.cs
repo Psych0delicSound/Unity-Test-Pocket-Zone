@@ -7,4 +7,5 @@ public class SaveData
 {
 	public Vector3 playerPosition;
 	public List<Item> saveDataInventory;
+	public Weapon equippedWeapon;
 }

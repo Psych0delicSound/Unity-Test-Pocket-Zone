@@ -19,6 +19,8 @@ public class GameController : MonoBehaviour
 	{
 		FillAvailablePlacesList();
 		InitialSpawnEnemies(GetEnemyPrefab(0), 3);
+		InitialSpawnEnemies(GetItemPrefab(0), 1);
+		InitialSpawnEnemies(GetItemPrefab(1), 2);
 	}
 
 	public void Spawn(GameObject prefab, Vector2 vectorPos)
@@ -27,6 +29,16 @@ public class GameController : MonoBehaviour
 	}
 
 	void InitialSpawnEnemies(GameObject prefab, int count)
+	{
+		for (int i = 0; i < count; i++)
+		{
+			int randomPlace = Random.Range(0, availablePlaces.Count);
+			Vector2 vector = availablePlaces[randomPlace];
+			Spawn(prefab, vector);
+		}
+	}
+
+	void InitialSpawnItems(GameObject prefab, int count)
 	{
 		for (int i = 0; i < count; i++)
 		{

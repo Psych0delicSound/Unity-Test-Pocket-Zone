@@ -15,7 +15,7 @@ public abstract class Character : MonoBehaviour
     protected Vector2 lookingAngle;
     [SerializeField] float cooldownTime = 1f;
     float cooldown = 0f;
-
+    public HPBar hpBar;
     [NonSerialized] public GameController gameController;
 
     protected virtual void Start()
@@ -44,7 +44,7 @@ public abstract class Character : MonoBehaviour
         if (isDead) return;
 
         currentHealth -= damageAmount;
-        Debug.Log($"{gameObject.name} took {damageAmount} damage. Remaining health: {currentHealth}");
+        hpBar.ChangeValue((float) currentHealth / maxHealth);
 
         if (currentHealth <= 0)
         {

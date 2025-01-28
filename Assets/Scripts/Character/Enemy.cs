@@ -9,6 +9,7 @@ public class Enemy : Character
     float distanceToTarget;
     Character targetCharacter;
     NavMeshAgent navMeshAgent;
+
     protected override void Start()
     {
         base.Start();
@@ -17,6 +18,8 @@ public class Enemy : Character
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
         navMeshAgent.speed = movementSpeed;
+
+        hpBar = GetComponentInChildren<HPBar>();
     }
 
     protected override void Update()
@@ -60,6 +63,7 @@ public class Enemy : Character
         targetCharacter = null;
 
         gameController.Spawn(gameController.GetItemPrefab(1), transform.position);
+        Destroy(gameObject);
     }
 
 }
