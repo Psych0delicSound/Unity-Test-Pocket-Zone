@@ -113,11 +113,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1.4686263
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.87325215
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8247475727727555733, guid: 586e4534332c75341beb1619a81390e6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -165,9 +165,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   stackLimit: 1
-  inStack: 1
+  inStack: 0
+  damage: 10
   range: 2
   cooldownTime: 1
-  bulletsLoaded: 2
+  bulletsLoaded: 0
   bulletsLoadLimit: 8
-  projectilePrefab: {fileID: 6136071427097125928, guid: 77ff110a000ce7b499a92fa3a72d94d2, type: 3}
+  requiredAmmoID: 1

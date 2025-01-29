@@ -31,6 +31,6 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.gameObject.tag == "Enemy") HitTarget(col.gameObject.GetComponent<Character>());
+        if (col.gameObject.tag == "Enemy" && !col.isTrigger) HitTarget(col.gameObject.GetComponent<Character>());
     }
 }

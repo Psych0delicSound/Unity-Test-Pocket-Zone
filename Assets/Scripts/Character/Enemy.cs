@@ -46,6 +46,8 @@ public class Enemy : Character
 
     void OnTriggerExit2D(Collider2D col)
     {
+        if (navMeshAgent == null) return;
+        
         if (col.tag == "Player")
         {
             targetT = null;

@@ -14,7 +14,6 @@ public class ItemPickup : MonoBehaviour
             if (item != null)
             {
                 inventory.AddItem(item);
-                //Destroy(col);
             }
         }
     }

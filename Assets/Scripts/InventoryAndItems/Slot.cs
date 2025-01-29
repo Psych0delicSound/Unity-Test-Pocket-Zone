@@ -11,7 +11,11 @@ public class Slot : MonoBehaviour
     [NonSerialized] public InventoryController inventory;
     private Item currentItem;
     public Item GetCurrentItem => currentItem;
-    public void SetCurrentItem(Item newItem) => currentItem = newItem;
+    public void SetCurrentItem(Item newItem)
+    {
+        currentItem = newItem;
+        UpdateSlot();
+    }
 
     public void Initialize(int index, InventoryController controller)
     {

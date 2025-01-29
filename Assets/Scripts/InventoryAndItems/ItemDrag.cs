@@ -85,8 +85,14 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     void HandleItemDestroy()
     {
-        Destroy(gameObject);
-        originalSlot.inventory.inventoryData[originalSlot.SlotIndex] = null;
+        
+        if (originalSlot.type == SlotType.InHand)
+        {
+            originalSlot.inventory.gameController.player.EquipWeapon(null);
+            originalSlot.SetCurrentItem(null);
+        }
+        else originalSlot.inventory.inventoryData[originalSlot.SlotIndex] = null;
         originalSlot.inventory.ClearAndUpdateSlots();
+        Destroy(gameObject);
     }
 }

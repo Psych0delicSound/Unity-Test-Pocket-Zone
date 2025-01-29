@@ -70,18 +70,6 @@ public class InventoryController : MonoBehaviour
         ClearAndUpdateSlots();
     }
 
-    public void EquipWeapon(Weapon weapon)
-    {
-        if (weapon == null) return;
-        //if (slotInHand.GetCurrentItem != null) inventoryData[originalIndex] = slotInHand.GetCurrentItem;
-
-        gameController.player.EquipWeapon(weapon);
-        slotInHand.SetCurrentItem(weapon);
-        slotInHand.UpdateSlot();
-        inventoryData.Remove(weapon);
-        ClearAndUpdateSlots();
-    }
-
     public void AddItem(Item item)
     {
         if (TryStackItem(item) || TryAddToEmptySlot(item))
@@ -126,13 +114,76 @@ public class InventoryController : MonoBehaviour
         return false;
     }
 
-    public void SetInventoryItems(List<Item> savedData)
+    public void SetInventoryItems(List<SaveDataItem> savedData)
     {
-        for (int i = 0; i < savedData.Count; i++)
+        foreach (SaveDataItem data in savedData)
         {
-            AddItem(savedData[i]);
+            Item item = Instantiate(itemDictionary.GetItemPrefab(data.id)).GetComponent<Item>();
+            if (item != null)
+            {
+                item.inStack = data.inStack;
+                if (item is WeaponFirearm) ((WeaponFirearm) item).bulletsLoaded = data.bulletsLoaded;
+                AddItem(item);
+            }
         }
     }
+
+    public List<SaveDataItem> GetInventoryItems()
+    {
+        List<SaveDataItem> dataInventory = new List<SaveDataItem>();
+        foreach (Item item in inventoryData)
+        {
+            int bullets = item is WeaponFirearm ? ((WeaponFirearm) item).bulletsLoaded : 0;
+            dataInventory.Add(new SaveDataItem
+            {
+                id = item.id,
+                inStack = item.inStack,
+                bulletsLoaded = bullets
+            });
+        }
+        return dataInventory;
+    }
+
+    public void SetEquippedWeapon(SaveDataItem data)
+    {
+        if (data == null || data.id == -1) return;
+
+        Weapon weapon = Instantiate(itemDictionary.GetItemPrefab(data.id)).GetComponent<Weapon>();
+        if (weapon is WeaponFirearm) ((WeaponFirearm) weapon).bulletsLoaded = data.bulletsLoaded;
+
+        EquipWeapon(weapon);
+        ClearAndUpdateSlots();
+    }
+
+    public SaveDataItem GetEquippedWeapon()
+    {
+        Weapon weapon = (Weapon)slotInHand.GetCurrentItem;
+        if (weapon == null) return new SaveDataItem
+        {
+            id = -1,
+            inStack = 0,
+            bulletsLoaded = 0
+        };
+
+        int bullets = weapon is WeaponFirearm ? ((WeaponFirearm) weapon).bulletsLoaded : 0;
+
+        return new SaveDataItem
+        {
+            id = weapon.id,
+            inStack = weapon.inStack,
+            bulletsLoaded = bullets
+        };
+    }
+
+    public void EquipWeapon(Weapon weapon)
+    {
+        if (weapon == null) return;
+
+        gameController.player.EquipWeapon(weapon);
+        slotInHand.SetCurrentItem(weapon);
+        inventoryData.Remove(weapon);
+    }
+
     public GameObject GetItemPrefab(int id)
     {
         return itemDictionary.GetItemPrefab(id);
@@ -142,7 +193,7 @@ public class InventoryController : MonoBehaviour
     {
         int index = inventoryData.IndexOf(item);
         slots[index].SetCurrentItem(item);
-        slots[index].UpdateSlot();
+        item.gameObject.transform.SetParent(slots[index].transform);
     }
 
     void ClearStacks()
@@ -162,6 +213,7 @@ public class InventoryController : MonoBehaviour
         {
             UpdateSlotData(inventoryData[i]);
         }
+        EquipWeapon(gameController.player.GetEquippedWeapon);
     }
 
     public int GetAmmoCount(int ammoId)
@@ -172,24 +224,24 @@ public class InventoryController : MonoBehaviour
     }
 
     public void DecreaseItemStack(int itemID, int amount)
-{
-    int remaining = amount;
-    List<Item> itemsToCheck = inventoryData.Where(item => item != null && item.id == itemID).ToList();
-
-    foreach (Item item in itemsToCheck)
     {
-        if (remaining <= 0) break;
-        int deduct = Mathf.Min(item.inStack, remaining);
-        item.inStack -= deduct;
-        remaining -= deduct;
+        int remaining = amount;
+        List<Item> itemsToCheck = inventoryData.Where(item => item != null && item.id == itemID).ToList();
 
-        if (item.inStack <= 0)
+        foreach (Item item in itemsToCheck)
         {
-            inventoryData.Remove(item);
-            Destroy(item.gameObject);
-        }
-    }
+            if (remaining <= 0) break;
+            int deduct = Mathf.Min(item.inStack, remaining);
+            item.inStack -= deduct;
+            remaining -= deduct;
 
-    ClearAndUpdateSlots();
-}
+            if (item.inStack <= 0)
+            {
+                inventoryData.Remove(item);
+                Destroy(item.gameObject);
+            }
+        }
+
+        ClearAndUpdateSlots();
+    }
 }

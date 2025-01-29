@@ -6,6 +6,6 @@ using UnityEngine;
 public class SaveData
 {
 	public Vector3 playerPosition;
-	public List<Item> saveDataInventory;
-	public Weapon equippedWeapon;
+	public List<SaveDataItem> saveDataInventory;
+	public SaveDataItem equippedWeapon;
 }
