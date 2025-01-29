@@ -44,27 +44,79 @@ public class ItemDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
 
     private void HandleDropLogic(Slot targetSlot)
+{
+    if (!ValidateDrop(targetSlot))
     {
-        if (!ValidateDrop(targetSlot))
-        {
-            ResetPosition();
-            return;
-        }
-
-        if (targetSlot.type == SlotType.Destroyer)
-        {
-            HandleItemDestroy();
-            return;
-        }
-
-        if (targetSlot.type == SlotType.InHand)
-        {
-            originalSlot.inventory.EquipWeapon((Weapon)originalSlot.GetCurrentItem);
-            return;
-        }
-
-        originalSlot.inventory.HandleItemMove(originalSlot.SlotIndex, targetSlot.SlotIndex);
+        ResetPosition();
+        return;
     }
+
+    if (targetSlot.type == SlotType.Destroyer)
+    {
+        HandleItemDestroy();
+        return;
+    }
+
+    // Handle dragging to InHand slot
+    if (targetSlot.type == SlotType.InHand)
+    {
+        Item draggedItem = originalSlot.GetCurrentItem;
+        Item equippedItem = targetSlot.GetCurrentItem;
+
+        if (equippedItem != null)
+        {
+            // Swap equipped item back to original inventory slot
+            originalSlot.SetCurrentItem(equippedItem);
+            equippedItem.transform.SetParent(originalSlot.transform);
+            if (originalSlot.type == SlotType.Inventory)
+                originalSlot.inventory.inventoryData[originalSlot.SlotIndex] = equippedItem;
+        }
+        else if (originalSlot.type == SlotType.Inventory)
+        {
+            // Clear original inventory slot
+            originalSlot.inventory.inventoryData[originalSlot.SlotIndex] = null;
+        }
+
+        // Equip the dragged item
+        originalSlot.inventory.EquipWeapon((Weapon)draggedItem);
+        return;
+    }
+
+    // Handle dragging from InHand to Inventory
+    if (originalSlot.type == SlotType.InHand && targetSlot.type == SlotType.Inventory)
+    {
+        Item equippedItem = originalSlot.GetCurrentItem;
+        Item targetItem = targetSlot.GetCurrentItem;
+
+        if (targetItem != null)
+        {
+            if (!(targetItem is Weapon))
+            {
+                ResetPosition();
+                return;
+            }
+            // Swap: equip target item and move equipped item to inventory
+            originalSlot.inventory.EquipWeapon((Weapon)targetItem);
+            targetSlot.SetCurrentItem(equippedItem);
+            equippedItem.transform.SetParent(targetSlot.transform);
+            originalSlot.inventory.inventoryData[targetSlot.SlotIndex] = equippedItem;
+        }
+        else
+        {
+            // Move equipped weapon to inventory
+            targetSlot.SetCurrentItem(equippedItem);
+            equippedItem.transform.SetParent(targetSlot.transform);
+            originalSlot.inventory.inventoryData[targetSlot.SlotIndex] = equippedItem;
+            originalSlot.SetCurrentItem(null);
+            originalSlot.inventory.gameController.player.EquipWeapon(null);
+        }
+        originalSlot.inventory.ClearAndUpdateSlots();
+        return;
+    }
+
+    // Default inventory-to-inventory move
+    originalSlot.inventory.HandleItemMove(originalSlot.SlotIndex, targetSlot.SlotIndex);
+}
 
     private bool ValidateDrop(Slot targetSlot)
     {

@@ -51,17 +51,18 @@ public class InventoryController : MonoBehaviour
 
             slot.Initialize(i, this);
             slots.Add(slot);
+            inventoryData = new List<Item>(new Item[initialSlots]);
         }
     }
 
     public void HandleItemMove(int originalIndex, int targetIndex)
     {
-        if (originalIndex >= inventoryData.Count || targetIndex >= inventoryData.Count)
-        {
-            if (originalIndex >= slots.Count || targetIndex >= slots.Count) return;
-            inventoryData.Add(null);
-            targetIndex = inventoryData.Count -1;
-        }
+        // if (originalIndex >= inventoryData.Count || targetIndex >= inventoryData.Count)
+        // {
+        //     if (originalIndex >= slots.Count || targetIndex >= slots.Count) return;
+        //     inventoryData.Add(null);
+        //     targetIndex = inventoryData.Count -1;
+        // }
         
         Item temp = inventoryData[originalIndex];
         inventoryData[originalIndex] = inventoryData[targetIndex];
@@ -81,7 +82,8 @@ public class InventoryController : MonoBehaviour
 
     private bool TryStackItem(Item newItem)
     {
-        for (int i = 0; i < inventoryData.Count; i++)
+        if (newItem is Weapon) return false;
+        for (int i = 0; i < slots.Count; i++)
         {
             if (inventoryData.Count - 1 < i) return false;
             Item itemForStack = inventoryData[i];
@@ -106,8 +108,7 @@ public class InventoryController : MonoBehaviour
         {
             if (slots[i].GetCurrentItem != null) continue;
 
-            if (inventoryData.Count - 1 < i) inventoryData.Add(item);
-            else inventoryData[i] = item;
+            inventoryData[i] = item;
 
             return true;
         }
@@ -133,6 +134,7 @@ public class InventoryController : MonoBehaviour
         List<SaveDataItem> dataInventory = new List<SaveDataItem>();
         foreach (Item item in inventoryData)
         {
+            if (item == null) continue;
             int bullets = item is WeaponFirearm ? ((WeaponFirearm) item).bulletsLoaded : 0;
             dataInventory.Add(new SaveDataItem
             {
@@ -208,10 +210,16 @@ public class InventoryController : MonoBehaviour
     public void ClearAndUpdateSlots()
     {
         ClearStacks();
-        inventoryData = inventoryData.Where(item => item != null).ToList();
-        for (int i = 0; i < inventoryData.Count; i++)
+        for (int i = 0; i < slots.Count; i++)
         {
-            UpdateSlotData(inventoryData[i]);
+            if (i < inventoryData.Count && inventoryData[i] != null)
+            {
+                UpdateSlotData(inventoryData[i]);
+            }
+            else
+            {
+                slots[i].SetCurrentItem(null);
+            }
         }
         EquipWeapon(gameController.player.GetEquippedWeapon);
     }
